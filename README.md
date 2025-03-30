@@ -1,75 +1,57 @@
-# BMWVision: GPS- und Geräteorientierungsvisualisierungs-App
+# BMWVision
 
-Die **BMWVision**-App dient der Analyse des GPS-Standorts und der Ausrichtung des Geräts, um die Fahrtrichtung auf der Kameraansicht in Echtzeit zu visualisieren.
+BMWVision to aplikacja webowa, która łączy obraz z kamery z nałożonym obiektem 3D (strzałką) wskazującym kierunek ruchu oraz mapę z lokalizacją użytkownika.
 
-## Beschreibung
+## Funkcjonalność
+- **Widok po lewej stronie:**
+  - Obraz z kamery użytkownika.
+  - Nakładka w postaci modelu 3D strzałki, wskazującej kierunek ruchu.
+- **Widok po prawej stronie:**
+  - Mapa Leaflet z oznaczoną lokalizacją użytkownika.
+  - Możliwość dynamicznej aktualizacji pozycji.
+- **Interaktywne sterowanie kamerą w scenie 3D:**
+  - Suwaki pozwalające zmieniać pozycję i orientację kamery 3D.
 
-Die **BMWVision**-App nutzt GPS-Daten sowie die Sensoren des Geräts (Gyroskop und Beschleunigungsmesser), um die aktuelle Fahrtrichtung zu bestimmen. Basierend auf diesen Daten wird auf dem Kamerabild ein Indikator angezeigt, der die aktuelle Fahrtrichtung des Geräts zeigt.
+## Struktura kodu
 
-## Funktionen
+### Pliki używane w projekcie:
+- `index.html` - Główna struktura aplikacji.
+- `leaflet.css` - Arkusz stylów do mapy.
+- `leaflet.js` - Biblioteka Leaflet do obsługi mapy.
+- `three.js` - Biblioteka Three.js do renderowania obiektu 3D.
+- `GLTFLoader.js` - Loader do wczytywania modelu strzałki.
+- `demo.jpg` - Przykładowy obraz testowy.
+- `arrow.glb` - Model 3D strzałki.
 
-- **GPS-Standortanalyse**: Die App erfasst GPS-Daten, um den aktuellen Standort zu bestimmen.
-- **Geräteorientierungsanalyse**: Mit Hilfe von Gyroskop und Beschleunigungsmesser wird die Ausrichtung des Geräts ermittelt.
-- **Fahrtrichtungsvisualisierung**: Ein Indikator, der die Fahrtrichtung auf dem Kamerabild anzeigt, wird in Echtzeit über das Kamerabild gelegt.
-- **Kameraintegration**: Die App ermöglicht es, den Richtungsindikator direkt auf dem Bild von der Kamera in Echtzeit anzuzeigen.
-- **Benutzeroberfläche**: Eine benutzerfreundliche Oberfläche zur Konfiguration der App und zur Überwachung von GPS-Daten und Geräteaussrichtungen.
+### Struktura HTML
+- `#left` - Lewa część ekranu (kamera + obiekt 3D)
+- `#right` - Prawa część ekranu (mapa + suwaki do sterowania kamerą)
+- `#camera` - Element `<video>` do obsługi strumienia z kamery.
+- `#map` - Kontener na mapę Leaflet.
+- `#arrowCanvas` - Canvas dla renderowania obiektu 3D.
 
-## Anforderungen
+### Skrypty JavaScript
+#### **Geolokalizacja**
+- Inicjalizacja mapy Leaflet na podstawie domyślnych współrzędnych.
+- Dodanie markera lokalizacji.
+- Dynamiczne odświeżanie pozycji co sekundę.
 
-- Android 8.0 (API 26) oder neuer / iOS 12.0 oder neuer
-- Zugriff auf GPS und Sensoren (Gyroskop, Beschleunigungsmesser)
-- Gerätekamera
-- Internetverbindung (für den Abruf von Karten- und Standortdaten)
+#### **Kamera i model 3D**
+- Pobieranie dostępu do kamery użytkownika.
+- Tworzenie sceny Three.js z kamerą i światłem.
+- Wczytanie modelu strzałki (`arrow.glb`) i ustawienie animacji obrotu.
+- Funkcja `moveCam()` pozwala na dynamiczną zmianę pozycji i orientacji kamery 3D za pomocą suwaków.
 
-## Installation
+## Instalacja i uruchomienie
+1. Pobierz repozytorium.
+2. Umieść pliki na serwerze.
+3. Upewnij się, że masz dostęp do kamery oraz plików `three.js`, `leaflet.js`, `GLTFLoader.js`.
+4. Otwórz `index.html` w przeglądarce.
 
-1. Klonen Sie das Repository auf Ihr Gerät:
+## Wymagania
+- Przeglądarka obsługująca WebRTC i WebGL.
+- Dostęp do kamery dla pełnej funkcjonalności.
+- Połączenie z Internetem do załadowania mapy OpenStreetMap.
 
-    ```bash
-    git clone https://github.com/username/bmwvision.git
-    ```
-
-2. Installieren Sie die erforderlichen Abhängigkeiten:
-
-    - Für Android:
-    
-        - Öffnen Sie das Projekt in Android Studio und führen Sie `gradle sync` aus, um die Abhängigkeiten zu installieren.
-    
-    - Für iOS:
-    
-        - Öffnen Sie das Projekt in Xcode und führen Sie `pod install` aus, um die Abhängigkeiten zu installieren.
-
-3. Stellen Sie sicher, dass die erforderlichen Berechtigungen für den Zugriff auf GPS, Kamera und Sensoren erteilt sind:
-
-    - Android: Fügen Sie die entsprechenden Berechtigungen in der `AndroidManifest.xml` hinzu.
-    - iOS: Aktualisieren Sie die `Info.plist`, um Zugriff auf GPS und Kamera zu erhalten.
-
-## Verwendung
-
-1. Starten Sie die App auf Ihrem mobilen Gerät.
-2. Die App erfasst automatisch GPS-Daten und die Ausrichtung des Geräts.
-3. Auf dem Bildschirm wird das Kamerabild angezeigt, zusammen mit einem dynamischen Richtungsindikator, der sich basierend auf den GPS-Daten und den Sensordaten aktualisiert.
-4. Sie können die App-Einstellungen anpassen, wie zum Beispiel die Empfindlichkeit des Indikators oder den Kartenmodus, im Einstellungsmenü.
-
-## Beispielansichten
-
-- **Kamerabild mit Fahrtrichtungsindikator**: Auf dem Kamerabild wird ein dynamischer Indikator angezeigt, der die Fahrtrichtung des Geräts anzeigt.
-- **Standortansicht auf der Karte**: Möglichkeit, den aktuellen Standort auf einer Karte im Hintergrund anzuzeigen.
-
-## Technologien
-
-- **GPS**: Wird verwendet, um die geografischen Koordinaten des Geräts zu bestimmen.
-- **Gyroskop und Beschleunigungsmesser**: Zur Messung der Geräteorientierung.
-- **Kamera**: Wird verwendet, um das Bild in Echtzeit zu erfassen.
-- **Karten**: Zeigt den Standort basierend auf den GPS-Daten an.
-- **OpenGL/Metal**: Wird zur Darstellung des Indikators und zum Überlagern des Kamerabildes verwendet.
-
-## Ressourcen
-
-- [Android GPS Dokumentation](https://developer.android.com/guide/topics/location)
-- [iOS Core Location Dokumentation](https://developer.apple.com/documentation/corelocation)
-- [Google Maps API](https://developers.google.com/maps/documentation)
-
-## Lizenz
-
-Die App ist unter der MIT-Lizenz verfügbar. Weitere Details finden Sie in der [LICENSE](LICENSE)-Datei.
+## Autor
+Projekt BMWVision.
