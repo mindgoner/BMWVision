@@ -15,20 +15,20 @@ BMWVision to aplikacja webowa, która łączy obraz z kamery z nałożonym obiek
 ## Struktura kodu
 
 ### Pliki używane w projekcie:
-- `index.html` - Główna struktura aplikacji.
-- `leaflet.css` - Arkusz stylów do mapy.
-- `leaflet.js` - Biblioteka Leaflet do obsługi mapy.
-- `three.js` - Biblioteka Three.js do renderowania obiektu 3D.
-- `GLTFLoader.js` - Loader do wczytywania modelu strzałki.
-- `demo.jpg` - Przykładowy obraz testowy.
-- `arrow.glb` - Model 3D strzałki.
+- `resources/views/welcome.blade.php` - Główna struktura aplikacji.
+- `public/css/leaflet.css` - Arkusz stylów do mapy.
+- `public/js/leaflet.js` - Biblioteka Leaflet do obsługi mapy.
+- `public/js/three.js` - Biblioteka Three.js do renderowania obiektu 3D.
+- `public/js/GLTFLoader.js` - Loader do wczytywania modelu strzałki.
+- `public/img/demo.jpg` - Przykładowy obraz testowy (placeholder dla kamery)
+- `public/obj/arrow.glb` - Model 3D strzałki.
 
 ### Struktura HTML
 - `#left` - Lewa część ekranu (kamera + obiekt 3D)
 - `#right` - Prawa część ekranu (mapa + suwaki do sterowania kamerą)
 - `#camera` - Element `<video>` do obsługi strumienia z kamery.
 - `#map` - Kontener na mapę Leaflet.
-- `#arrowCanvas` - Canvas dla renderowania obiektu 3D.
+- `#arrowCanvas` - Canvas dla renderowania obiektu 3D (lewitującej na kamerce strzałki)
 
 ### Skrypty JavaScript
 #### **Geolokalizacja**
