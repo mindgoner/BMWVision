@@ -43,15 +43,31 @@ BMWVision to aplikacja webowa, która łączy obraz z kamery z nałożonym obiek
 - Funkcja `moveCam()` pozwala na dynamiczną zmianę pozycji i orientacji kamery 3D za pomocą suwaków.
 
 ## Instalacja i uruchomienie
-1. Pobierz repozytorium.
-2. Umieść pliki na serwerze.
-3. Upewnij się, że masz dostęp do kamery oraz plików `three.js`, `leaflet.js`, `GLTFLoader.js`.
-4. Otwórz `index.html` w przeglądarce.
+1. Pobierz repozytorium, wpisując poniższe w interesujacym Cię miejscu (możesz dodać kropkę na końcu, żeby wypakować w tym samym folderze):
+```bash
+git clone https://github.com/mindgoner/BMWVision.git
+```
+2. Przejdź do folderu z projektem i zainstaluj zależności composera:
+```bash
+composer update
+```
+3. Skopiuj plik .env.example do .env
+4. Uruchom serwer poleceniem
+```bash
+php artisan serve
+```
+6. W przeglądarce przejdź na adres http://127.0.0.1:8000.
+
 
 ## Wymagania
-- Przeglądarka obsługująca WebRTC i WebGL.
+- [Git](https://git-scm.com/downloads)
+- [Composer](https://getcomposer.org/)
+- PHP 8.2 ^
+- Przeglądarka obsługująca WebRTC i WebGL (prawie każda)
 - Dostęp do kamery dla pełnej funkcjonalności.
 - Połączenie z Internetem do załadowania mapy OpenStreetMap.
 
-## Autor
-Projekt BMWVision.
+## Autorzy
+[Bartosz Bieniek](https://github.com/mindgoner)
+[Dawid Klimek](https://github.com/skruty)
+[Mariusz Jagosz](https://github.com/mariuszjagosz)
