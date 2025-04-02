@@ -75,13 +75,14 @@
             z-index: 50;
         }
     </style>
+    <script src="/js/jquery.js"></script>
 </head>
 <body>
     <div id="container">
         <!-- Lewa część - obraz z kamery -->
         <div id="left">
             <video id="camera" autoplay></video>
-            <img id="demoImage" src="/img/demo.jpg" />
+            {{-- <img id="demoImage" src="/img/demo.jpg" /> --}}
         </div>
 
         <!-- Prawa część - mapa Leaflet -->
@@ -137,7 +138,7 @@
             });
 
         // Inicjalizacja mapy Leaflet
-        const map = L.map('map').setView([latitude, longitude], 13); // Ustawienie mapy na początkową pozycję
+        const map = L.map('map').setView([latitude, longitude], 20); // Ustawienie mapy na początkową pozycję
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -152,10 +153,27 @@
         }, 1000);
 
         // Przykład aktualizacji zmiennych latitude i longitude
+        // setInterval(() => {
+        //     // Tu możesz ustawić nowe wartości zmiennych latitude i longitude
+        //     latitude += 0.0008; // Zmiana szerokości geograficznej
+        //     longitude += 0.0008; // Zmiana długości geograficznej
+        // }, 1000);
         setInterval(() => {
-            // Tu możesz ustawić nowe wartości zmiennych latitude i longitude
-            latitude += 0.0008; // Zmiana szerokości geograficznej
-            longitude += 0.0008; // Zmiana długości geograficznej
+            // Send GET request to the server /sensor using ajax:
+            $.ajax({
+                url: '/sensor',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Update latitude and longitude with the received data
+                    latitude = data.latitude_decimal;
+                    longitude = data.longitude_decimal;
+                    console.log("Latitude: " + latitude + ", Longitude: " + longitude);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Błąd podczas pobierania danych geolokalizacyjnych:", error);
+                }
+            });
         }, 1000);
     </script>
 
