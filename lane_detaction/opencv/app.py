@@ -12,7 +12,7 @@ def detect_lane(frame):
     blur = cv2.GaussianBlur(gray, (5, 5), 0)
     edges = cv2.Canny(blur, 50, 150)
 
-    # TRÓJKĄTNA MASKA: lewy dół, prawy dół, środek górny (25% wysokości)
+    # TRÓJKĄTNA MASKA: od lewego i prawego dolnego rogu do środka górnej części (25%)
     triangle = np.array([[
         (0, height),
         (width, height),
@@ -34,18 +34,18 @@ def detect_lane(frame):
             x1, y1, x2, y2 = line[0]
 
             if x2 == x1:
-                continue  # Pionowa linia – pomijamy (nie ma nachylenia)
+                continue  # Pionowe linie pomijamy
 
             slope = (y2 - y1) / (x2 - x1)
             if abs(slope) < 0.5:
-                continue  # Zbyt pozioma – pomijamy
+                continue  # Zbyt pozioma – nie jest pasem
 
             if slope < 0:
                 left_lines.append((x1, y1, x2, y2))
             else:
                 right_lines.append((x1, y1, x2, y2))
 
-    # Uśrednienie lewych/prawych linii
+    # Uśrednianie pozycji lewej i prawej linii
     def average_line(lines):
         if len(lines) == 0:
             return None
@@ -61,18 +61,35 @@ def detect_lane(frame):
         x2 = int(poly[0] * y2 + poly[1])
         return (x1, y1, x2, y2)
 
-    line_image = np.zeros_like(frame)
-
     left_avg = average_line(left_lines)
     right_avg = average_line(right_lines)
 
-    if left_avg is not None:
-        cv2.line(line_image, (left_avg[0], left_avg[1]), (left_avg[2], left_avg[3]), (255, 0, 0), 5)
-    if right_avg is not None:
-        cv2.line(line_image, (right_avg[0], right_avg[1]), (right_avg[2], right_avg[3]), (0, 255, 0), 5)
+    result = frame.copy()
 
-    result = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
+    if left_avg is not None:
+        cv2.line(result, (left_avg[0], left_avg[1]), (left_avg[2], left_avg[3]), (255, 0, 0, 0.1), 5)
+    if right_avg is not None:
+        cv2.line(result, (right_avg[0], right_avg[1]), (right_avg[2], right_avg[3]), (0, 255, 0, 0.1), 5)
+
+    # Dodanie trzeciej linii – do punktu przecięcia
+    if left_avg is not None and right_avg is not None:
+        def get_line_eq(x1, y1, x2, y2):
+            m = (x2 - x1) / (y2 - y1)
+            b = x1 - m * y1
+            return m, b
+
+        m_left, b_left = get_line_eq(*left_avg)
+        m_right, b_right = get_line_eq(*right_avg)
+
+        if m_left != m_right:
+            y_cross = int((b_right - b_left) / (m_left - m_right))
+            x_cross = int(m_left * y_cross + b_left)
+
+            bottom_center = (int(width / 2), height)
+            cv2.line(result, bottom_center, (x_cross, y_cross), (0, 0, 255), 3)
+
     return result
+
 
 
 def generate_frames():
