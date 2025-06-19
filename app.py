@@ -90,12 +90,14 @@ def detect_lane(frame):
                 y_cross = int((b_right - b_left) / (m_left - m_right))
                 x_cross = int(m_left * y_cross + b_left)
 
+                pezerox = int(width / 2) - 30
+
                 # START i KONIEC
-                P0 = (int(width / 2) - 10, height)  # punkt startowy (dolna krawędź)
+                P0 = (pezerox, height)  # punkt startowy (dolna krawędź)
                 P2 = (x_cross, y_cross)             # punkt końcowy (przecięcie)
 
                 # Punkt kontrolny – zakrzywienie (tu w prawo, zmień znak jeśli chcesz w lewo)
-                bend_offset = 40
+                bend_offset = pezerox - x_cross
                 P1 = (
                     int((P0[0] + P2[0]) / 2 + bend_offset),
                     int((P0[1] + P2[1]) / 2 - 30)
